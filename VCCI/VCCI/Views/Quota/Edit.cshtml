@@ -26,7 +26,7 @@
             @Html.LabelFor(model => model.Description)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Description)
+            @Html.TextAreaFor(model => model.Description, new string[] { "width: 200px; height:400px"})
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 
@@ -34,32 +34,16 @@
             @Html.LabelFor(model => model.CreatedBy)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.CreatedBy)
+            @Html.TextBoxFor(model => model.CreatedBy, new { @readonly = "readonly"})
             @Html.ValidationMessageFor(model => model.CreatedBy)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.LastModifiedBy)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.LastModifiedBy)
-            @Html.ValidationMessageFor(model => model.LastModifiedBy)
         </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.CreatedAt)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.CreatedAt)
+            @Html.TextBoxFor(model => model.CreatedAt, new { @readonly = "readonly" })
             @Html.ValidationMessageFor(model => model.CreatedAt)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.LastModifiedAt)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.LastModifiedAt)
-            @Html.ValidationMessageFor(model => model.LastModifiedAt)
         </div>
 
         <p>

@@ -1,63 +1,73 @@
 ﻿@model IEnumerable<VCCI.DAL.Quota>
-
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
-
+<h2>
+    Index</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table>
+@*<table>
     <tr>
-        <th>
+        <th width="20%">
             @Html.DisplayNameFor(model => model.Title)
         </th>
-        <th>
+        <th width="40%">
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th>
+        <th width="20%">
             @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.LastModifiedBy)
-        </th>*@
-        <th>
+        <th width="20%">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </th>
-       @* <th>
-            @Html.DisplayNameFor(model => model.LastModifiedAt)
-        </th>*@
-        <th></th>
     </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+                    <br />
+                    @if (User.IsInRole("Admin"))
+                    {
+                
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }) <br />
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    }
+                </p>
+            </td>
+        </tr>
+    }
+</table>*@
+<h2>
+    Basic Web Grid</h2>
+<div id="divgrid">
+    @{
+        var grid = new WebGrid(Model, defaultSort: "CreatedAt", rowsPerPage: 20, canSort: true, ajaxUpdateContainerId: "divgrid");
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastModifiedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedAt)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastModifiedAt)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
 
-</table>
+            grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
+
+            grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
+
+            grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
+    ), tableStyle: ""
+    )
+</div>

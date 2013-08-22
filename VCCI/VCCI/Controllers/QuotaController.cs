@@ -9,6 +9,7 @@ using VCCI.DAL;
 
 namespace VCCI.Controllers
 {
+    [Authorize]
     public class QuotaController : Controller
     {
         private VCCIEntities db = new VCCIEntities();
@@ -18,7 +19,15 @@ namespace VCCI.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Quotas.ToList());
+            List<Quota> quotas = new List<Quota>();
+            foreach (Quota quota in db.Quotas.ToList().OrderBy(m => m.CreatedAt))
+            {
+                if (quota.Description.Length > 100)
+                    quota.Description = quota.Description.Substring(0, 100) + "...";
+                quotas.Add(quota);
+            }
+
+            return View(quotas);
         }
 
         //
@@ -52,6 +61,10 @@ namespace VCCI.Controllers
             {
                 try
                 {
+                    quota.LastModifiedAt = DateTime.Now;
+                    quota.CreatedAt = DateTime.Now;
+                    quota.LastModifiedBy = User.Identity.Name;
+                    
                     db.Quotas.Add(quota);
                     if (db.GetValidationErrors().Count() > 0)
                     {
@@ -96,6 +109,9 @@ namespace VCCI.Controllers
         {
             if (ModelState.IsValid)
             {
+                quota.LastModifiedAt = DateTime.Now;
+                quota.LastModifiedBy = User.Identity.Name;
+
                 db.Entry(quota).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

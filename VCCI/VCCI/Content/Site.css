@@ -120,7 +120,7 @@ header .content-wrapper {
 
 footer {
     clear: both;
-    background-color: #e2e2e2;
+    /*background-color: #e2e2e2;*/
     font-size: .8em;
     height: 100px;
 }
@@ -753,4 +753,24 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+}
+
+.colTitle
+{
+    width: 150px;
+}
+
+.colDescription
+{
+    width: 700px;
+}
+
+.colCreatedBy
+{
+    width: 20px;
+}
+
+.colCreatedAt
+{
+    width: 30px;
 }
