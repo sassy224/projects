@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<VCCI.DAL.Quota>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách thông tin";
 }
-<h2>
-    Index</h2>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Thêm mới", "Create")
 </p>
 @*<table>
     <tr>
@@ -53,7 +51,7 @@
     }
 </table>*@
 <h2>
-    Basic Web Grid</h2>
+    Bảng thông tin</h2>
 <div id="divgrid">
     @{
         var grid = new WebGrid(Model, defaultSort: "CreatedAt", rowsPerPage: 20, canSort: true, ajaxUpdateContainerId: "divgrid");

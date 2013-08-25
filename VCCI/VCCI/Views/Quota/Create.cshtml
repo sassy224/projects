@@ -6,8 +6,8 @@
 
 <h2 runat="server" id="message">@ViewBag.Message</h2>
 
-<h2>Create</h2>
-
+<h2>Tạo mới</h2>
+<br />
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
@@ -15,7 +15,7 @@
         <legend>Quota</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Title)
+            @Html.LabelFor(model => model.Title, "Tiêu đề")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.Title)
@@ -23,15 +23,15 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
+            @Html.LabelFor(model => model.Description, "Mô tả chi tiết")
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Description)
+            @Html.TextAreaFor(model => model.Description, 10, 10, "")
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.CreatedBy)
+            @Html.LabelFor(model => model.CreatedBy, "Người tạo")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.CreatedBy)
@@ -63,13 +63,13 @@
         </div>*@
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Tạo" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Trở lại danh sách", "Index")
 </div>
 
 @section Scripts {
