@@ -57,15 +57,34 @@
         var grid = new WebGrid(Model, defaultSort: "CreatedAt", rowsPerPage: 20, canSort: true, ajaxUpdateContainerId: "divgrid");
     }
 
-    @grid.GetHtml(
-        columns: grid.Columns(
-            grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
+    @if (User.IsInRole("Admin"))
+    {
+        @grid.GetHtml(
+            columns: grid.Columns(
+                grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
 
-            grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
+                grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
 
-            grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
+                grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
 
-            grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
-    ), tableStyle: ""
-    )
+                grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt"),
+        
+            grid.Column(header:"Delete" , format: @<text>@Html.ActionLink("Delete", "Delete", "Quota", new { id = item.ID }, null)</text>)
+            )
+        )
+    }
+    else
+    {
+        @grid.GetHtml(
+            columns: grid.Columns(
+                grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
+
+                grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
+
+                grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
+
+                grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
+            )
+        )
+    }
 </div>

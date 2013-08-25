@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VCCI.DAL;
+using log4net;
 
 namespace VCCI.Controllers
 {
@@ -13,6 +14,15 @@ namespace VCCI.Controllers
     public class QuotaController : Controller
     {
         private VCCIEntities db = new VCCIEntities();
+        //log to C:\log\TRI-RoundUP-Web.txt
+		//log4net.Config.XmlConfigurator.Configure();
+        private ILog log;
+
+        public QuotaController()
+        {
+            log4net.Config.XmlConfigurator.Configure();
+            log = log4net.LogManager.GetLogger(typeof(QuotaController));
+        }
 
         //
         // GET: /Quota/
@@ -20,14 +30,22 @@ namespace VCCI.Controllers
         public ActionResult Index()
         {
             List<Quota> quotas = new List<Quota>();
-            foreach (Quota quota in db.Quotas.ToList().OrderBy(m => m.CreatedAt))
-            {
-                if (quota.Description.Length > 100)
-                    quota.Description = quota.Description.Substring(0, 100) + "...";
-                quotas.Add(quota);
+            
+            try
+            {   
+                foreach (Quota quota in db.Quotas.ToList().OrderBy(m => m.CreatedAt))
+                {
+                    if (quota.Description.Length > 100)
+                        quota.Description = quota.Description.Substring(0, 100) + "...";
+                    quotas.Add(quota);
+                }
             }
-
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
+            }
             return View(quotas);
+           
         }
 
         //
@@ -36,9 +54,16 @@ namespace VCCI.Controllers
         public ActionResult Details(decimal id = 0)
         {
             Quota quota = db.Quotas.Find(id);
-            if (quota == null)
+            try
             {
-                return HttpNotFound();
+                if (quota == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
             }
             return View(quota);
         }
@@ -81,6 +106,7 @@ namespace VCCI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.Message = ex.Message;
+                    log.Error(ex.Message, ex);
                 }
                 
             }
@@ -94,9 +120,16 @@ namespace VCCI.Controllers
         public ActionResult Edit(decimal id = 0)
         {
             Quota quota = db.Quotas.Find(id);
-            if (quota == null)
+            try
             {
-                return HttpNotFound();
+                if (quota == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
             }
             return View(quota);
         }
@@ -107,14 +140,21 @@ namespace VCCI.Controllers
         [HttpPost]
         public ActionResult Edit(Quota quota)
         {
-            if (ModelState.IsValid)
+            try
             {
-                quota.LastModifiedAt = DateTime.Now;
-                quota.LastModifiedBy = User.Identity.Name;
+                if (ModelState.IsValid)
+                {
+                    quota.LastModifiedAt = DateTime.Now;
+                    quota.LastModifiedBy = User.Identity.Name;
 
-                db.Entry(quota).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    db.Entry(quota).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
             }
             return View(quota);
         }
@@ -125,9 +165,16 @@ namespace VCCI.Controllers
         public ActionResult Delete(decimal id = 0)
         {
             Quota quota = db.Quotas.Find(id);
-            if (quota == null)
+            try
             {
-                return HttpNotFound();
+                if (quota == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
             }
             return View(quota);
         }
