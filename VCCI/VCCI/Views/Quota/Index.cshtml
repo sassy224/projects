@@ -69,8 +69,9 @@
 
                 grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt"),
         
-            grid.Column(header:"Delete" , format: @<text>@Html.ActionLink("Delete", "Delete", "Quota", new { id = item.ID }, null)</text>)
-            )
+				grid.Column(header:"Delete" , format: @<text>@Html.ActionLink("Delete", "Delete", "Quota", new { id = item.ID }, null)</text>)
+			),
+			tableStyle: "table table-bordered table-striped"
         )
     }
     else
@@ -84,7 +85,10 @@
                 grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
 
                 grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
-            )
+            ),
+			tableStyle: "table table-bordered table-striped"
+			//alternatingRowStyle: "webgrid-alternating-row",
+			//rowStyle: "webgrid-row-style"
         )
     }
 </div>
