@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using VCCI.DAL;
 using log4net;
+using VCCI.Models;
 
 namespace VCCI.Controllers
 {
@@ -29,21 +30,21 @@ namespace VCCI.Controllers
 
         public ActionResult Index()
         {
-            List<Quota> quotas = new List<Quota>();
+			List<Quota> quotas = db.Quotas.OrderByDescending(m => m.CreatedAt).ToList();
             
-            try
-            {   
-                foreach (Quota quota in db.Quotas.ToList().OrderBy(m => m.CreatedAt))
-                {
-                    if (quota.Description.Length > 100)
-                        quota.Description = quota.Description.Substring(0, 100) + "...";
-                    quotas.Add(quota);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex.Message, ex);
-            }
+			//try
+			//{   
+			//    foreach (Quota quota in db.Quotas.ToList().OrderByDescending(m => m.CreatedAt))
+			//    {
+			//        //if (quota.Description.Length > 100)
+			//        //    quota.Description = quota.Description.Substring(0, 100) + "...";
+			//        quotas.Add(quota);
+			//    }
+			//}
+			//catch (Exception ex)
+			//{
+			//    log.Error(ex.Message, ex);
+			//}
             return View(quotas);
            
         }
@@ -72,21 +73,27 @@ namespace VCCI.Controllers
         // GET: /Quota/Create
 
         public ActionResult Create()
-        {
-            return View();
+        {		
+			return View(new QuotaModel());
         }
 
         //
         // POST: /Quota/Create
 
         [HttpPost]
-        public ActionResult Create(Quota quota)
+        public ActionResult Create(QuotaModel quotaModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    quota.LastModifiedAt = DateTime.Now;
+					Quota quota = new Quota();
+
+					quota.Title = quotaModel.Title;
+					quota.Description = quotaModel.Description;
+					quota.CreatedBy = quotaModel.CreatedBy;
+					quota.DepartmentId = int.Parse(quotaModel.SelectedDepartment);
+					quota.LastModifiedAt = DateTime.Now;
                     quota.CreatedAt = DateTime.Now;
                     quota.LastModifiedBy = User.Identity.Name;
                     
@@ -111,7 +118,7 @@ namespace VCCI.Controllers
                 
             }
 
-            return View(quota);
+            return View(quotaModel);
         }
 
         //
@@ -120,34 +127,48 @@ namespace VCCI.Controllers
         public ActionResult Edit(decimal id = 0)
         {
             Quota quota = db.Quotas.Find(id);
+			QuotaModel quotaModel = new QuotaModel();
             try
             {
                 if (quota == null)
                 {
                     return HttpNotFound();
                 }
+				quotaModel.ID = quota.ID;
+				quotaModel.Title = quota.Title;
+				quotaModel.Description = quota.Description;
+				quotaModel.CreatedBy = quota.CreatedBy;
+				quotaModel.SelectedDepartment = quota.DepartmentId.ToString();
+
             }
             catch (Exception ex)
             {
                 log.Error(ex.Message, ex);
             }
-            return View(quota);
+			return View(quotaModel);
         }
 
         //
         // POST: /Quota/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(Quota quota)
+        public ActionResult Edit(QuotaModel quotaModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    quota.LastModifiedAt = DateTime.Now;
-                    quota.LastModifiedBy = User.Identity.Name;
+					Quota quota = db.Quotas.Find(quotaModel.ID);
 
-                    db.Entry(quota).State = EntityState.Modified;
+					quota.Title = quotaModel.Title;
+					quota.Description = quotaModel.Description;
+					quota.CreatedBy = quotaModel.CreatedBy;
+					quota.DepartmentId = int.Parse(quotaModel.SelectedDepartment);
+					quota.LastModifiedAt = DateTime.Now;
+					quota.CreatedAt = DateTime.Now;
+					quota.LastModifiedBy = User.Identity.Name;
+
+					db.Entry(quota).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -156,7 +177,7 @@ namespace VCCI.Controllers
             {
                 log.Error(ex.Message, ex);
             }
-            return View(quota);
+            return View(quotaModel);
         }
 
         //

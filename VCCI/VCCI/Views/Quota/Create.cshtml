@@ -1,44 +1,48 @@
-﻿@model VCCI.DAL.Quota
-
+﻿@model VCCI.Models.QuotaModel
 @{
-    ViewBag.Title = "Create";
+	ViewBag.Title = "Create";
 }
-
 <h2 runat="server" id="message">@ViewBag.Message</h2>
-
-<h2>Tạo mới</h2>
+<h2>
+	Tạo mới</h2>
 <br />
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
+@using (Html.BeginForm())
+{
+	@Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Quota</legend>
+	<fieldset>
+		<legend>Quota</legend>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Title, "Tiêu đề")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Title)
+			@Html.ValidationMessageFor(model => model.Title)
+		</div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Title, "Tiêu đề")
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title)
-        </div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Description, "Mô tả chi tiết")
+		</div>
+		<div class="editor-field">
+			@Html.TextAreaFor(model => model.Description, 10, 10, "")
+			@Html.ValidationMessageFor(model => model.Description)
+		</div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Description, "Mô tả chi tiết")
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.Description, 10, 10, "")
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.CreatedBy, "Người tạo")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.CreatedBy)
+			@Html.ValidationMessageFor(model => model.CreatedBy)
+		</div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CreatedBy, "Người tạo")
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.CreatedBy)
-            @Html.ValidationMessageFor(model => model.CreatedBy)
-        </div>
-
-        @*<div class="editor-label">
+		<div class="editor-label">
+			@Html.LabelFor(model => model.SelectedDepartment, "Phòng ban")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.SelectedDepartment, new SelectList(Model.Departments, "Value", "Text"))
+		</div>
+		@*<div class="editor-label">
             @Html.LabelFor(model => model.LastModifiedBy)
         </div>
         <div class="editor-field">
@@ -61,17 +65,14 @@
             @Html.EditorFor(model => model.LastModifiedAt)
             @Html.ValidationMessageFor(model => model.LastModifiedAt)
         </div>*@
-
-        <p>
-            <input type="submit" value="Tạo" />
-        </p>
-    </fieldset>
+		<p>
+			<input type="submit" value="Tạo" />
+		</p>
+	</fieldset>
 }
-
 <div>
-    @Html.ActionLink("Trở lại danh sách", "Index")
+	@Html.ActionLink("Trở lại danh sách", "Index")
 </div>
-
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 }

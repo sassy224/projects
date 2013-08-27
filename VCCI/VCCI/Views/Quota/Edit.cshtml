@@ -1,4 +1,4 @@
-﻿@model VCCI.DAL.Quota
+﻿@model VCCI.Models.QuotaModel
 
 @{
     ViewBag.Title = "Edit";
@@ -38,13 +38,20 @@
             @Html.ValidationMessageFor(model => model.CreatedBy)
         </div>
 
-        <div class="editor-label">
+		<div class="editor-label">
+			@Html.LabelFor(model => model.SelectedDepartment, "Phòng ban")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.SelectedDepartment, new SelectList(Model.Departments, "Value", "Text", Model.SelectedDepartment))
+		</div>
+
+        @*<div class="editor-label">
             @Html.LabelFor(model => model.CreatedAt, "Thời gian tạo")
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.CreatedAt, new { @readonly = "readonly" })
             @Html.ValidationMessageFor(model => model.CreatedAt)
-        </div>
+        </div>*@
 
         <p>
             <input type="submit" value="Lưu lại" />

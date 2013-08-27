@@ -6,8 +6,24 @@
     <edmx:StorageModels>
     <Schema Namespace="VCCIModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="VCCIModelStoreContainer">
+          <EntitySet Name="Department" EntityType="VCCIModel.Store.Department" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Quota" EntityType="VCCIModel.Store.Quota" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Quota_Department" Association="VCCIModel.Store.FK_Quota_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Quota" EntitySet="Quota" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Quota_Department1" Association="VCCIModel.Store.FK_Quota_Department1">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Quota" EntitySet="Quota" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Quota">
           <Key>
             <PropertyRef Name="ID" />
@@ -15,18 +31,61 @@
           <Property Name="ID" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DepartmentId" Type="numeric" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="LastModifiedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="LastModifiedAt" Type="datetime" />
         </EntityType>
+        <Association Name="FK_Quota_Department">
+          <End Role="Department" Type="VCCIModel.Store.Department" Multiplicity="1" />
+          <End Role="Quota" Type="VCCIModel.Store.Quota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Quota">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Quota_Department1">
+          <End Role="Department" Type="VCCIModel.Store.Department" Multiplicity="1" />
+          <End Role="Quota" Type="VCCIModel.Store.Quota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Quota">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="VCCIModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="VCCIEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="VCCIModel.Department" />
           <EntitySet Name="Quotas" EntityType="VCCIModel.Quota" />
+          <AssociationSet Name="FK_Quota_Department" Association="VCCIModel.FK_Quota_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Quota" EntitySet="Quotas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Quota_Department1" Association="VCCIModel.FK_Quota_Department1">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Quota" EntitySet="Quotas" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Decimal" Name="ID" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Quotas" Relationship="VCCIModel.FK_Quota_Department" FromRole="Department" ToRole="Quota" />
+          <NavigationProperty Name="Quotas1" Relationship="VCCIModel.FK_Quota_Department1" FromRole="Department" ToRole="Quota" />
+        </EntityType>
         <EntityType Name="Quota">
           <Key>
             <PropertyRef Name="ID" />
@@ -34,17 +93,52 @@
           <Property Type="Decimal" Name="ID" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Title" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="DepartmentId" Nullable="false" Precision="18" Scale="0" />
           <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="LastModifiedBy" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="CreatedAt" />
           <Property Type="DateTime" Name="LastModifiedAt" />
+          <NavigationProperty Name="Department" Relationship="VCCIModel.FK_Quota_Department" FromRole="Quota" ToRole="Department" />
+          <NavigationProperty Name="Department1" Relationship="VCCIModel.FK_Quota_Department1" FromRole="Quota" ToRole="Department" />
         </EntityType>
+        <Association Name="FK_Quota_Department">
+          <End Type="VCCIModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="VCCIModel.Quota" Role="Quota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Quota">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Quota_Department1">
+          <End Type="VCCIModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="VCCIModel.Quota" Role="Quota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Quota">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="VCCIModelStoreContainer" CdmEntityContainer="VCCIEntities">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="VCCIModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Quotas">
             <EntityTypeMapping TypeName="VCCIModel.Quota">
               <MappingFragment StoreEntitySet="Quota">
@@ -52,6 +146,7 @@
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -80,7 +175,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="Entities">
-        <EntityTypeShape EntityType="VCCIModel.Quota" Width="1.5" PointX="0.75" PointY="0.75" Height="2.3648893229166665" />
+        <EntityTypeShape EntityType="VCCIModel.Department" Width="1.5" PointX="0.75" PointY="1.5" Height="1.7879850260416657" />
+        <EntityTypeShape EntityType="VCCIModel.Quota" Width="1.5" PointX="3" PointY="1" Height="2.9417936197916656" />
+        <AssociationConnector Association="VCCIModel.FK_Quota_Department" >
+          <ConnectorPoint PointX="2.25" PointY="2.3939925130208328" />
+          <ConnectorPoint PointX="3" PointY="2.3939925130208328" />
+        </AssociationConnector>
+        <AssociationConnector Association="VCCIModel.FK_Quota_Department1" >
+          <ConnectorPoint PointX="2.25" PointY="1.8844962565104164" />
+          <ConnectorPoint PointX="3" PointY="1.8844962565104164" />
+        </AssociationConnector>
       </Diagram>
     </Diagrams>
   </Designer>

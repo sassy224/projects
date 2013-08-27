@@ -774,6 +774,11 @@ td { border: 1px solid black; }
     width: 20px;
 }
 
+.colDepartment
+{
+    width: 100px;
+}
+
 .colCreatedAt
 {
     width: 30px;

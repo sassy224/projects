@@ -12,18 +12,18 @@ namespace VCCI.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Quota
+    public partial class Department
     {
-        public decimal ID { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public decimal DepartmentId { get; set; }
-        public string CreatedBy { get; set; }
-        public string LastModifiedBy { get; set; }
-        public Nullable<System.DateTime> CreatedAt { get; set; }
-        public Nullable<System.DateTime> LastModifiedAt { get; set; }
+        public Department()
+        {
+            this.Quotas = new HashSet<Quota>();
+            this.Quotas1 = new HashSet<Quota>();
+        }
     
-        public virtual Department Department { get; set; }
-        public virtual Department Department1 { get; set; }
+        public decimal ID { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<Quota> Quotas { get; set; }
+        public virtual ICollection<Quota> Quotas1 { get; set; }
     }
 }

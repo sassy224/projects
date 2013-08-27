@@ -25,6 +25,7 @@ namespace VCCI.DAL
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<Department> Departments { get; set; }
         public DbSet<Quota> Quotas { get; set; }
     }
 }

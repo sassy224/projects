@@ -54,7 +54,7 @@
     Bảng thông tin</h2>
 <div id="divgrid">
     @{
-        var grid = new WebGrid(Model, defaultSort: "CreatedAt", rowsPerPage: 20, canSort: true, ajaxUpdateContainerId: "divgrid");
+		var grid = new WebGrid(Model, defaultSort: "CreatedAt DESC", rowsPerPage: 20, canSort: true, ajaxUpdateContainerId: "divgrid");
     }
 
     @if (User.IsInRole("Admin"))
@@ -67,28 +67,30 @@
 
                 grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
 
-                grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt"),
-        
-				grid.Column(header:"Delete" , format: @<text>@Html.ActionLink("Delete", "Delete", "Quota", new { id = item.ID }, null)</text>)
+				grid.Column("Department", header: "Phòng ban", format: @<text>@item.Department.Name</text>, style: "colDepartment"),
+
+				grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt"),
+
+				grid.Column(header: "", format: @<text>@Html.ActionLink("Delete", "Delete", "Quota", new { id = item.ID }, null)</text>)
 			),
 			tableStyle: "table table-bordered table-striped"
-        )
-    }
-    else
-    {
+		)
+	}
+	else
+	{
         @grid.GetHtml(
-            columns: grid.Columns(
-                grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
+			columns: grid.Columns(
+				grid.Column("Title", header: "Tiêu đề", format: @<text>@Html.ActionLink((string)item.Title, "Edit", "Quota", new { id = item.ID }, null)</text>, style: "colTitle"),
 
-                grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
+				grid.Column("Description", header: "Mô tả", format: @<text>@item.Description</text>, style: "colDescription"),
 
-                grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
+				grid.Column("CreatedBy", header: "Người tạo", format: @<text>@item.CreatedBy</text>, style: "colCreatedBy"),
 
-                grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
-            ),
+				grid.Column("Department", header: "Phòng ban", format: @<text>@item.Department.Name</text>, style: "colDepartment"),
+
+				grid.Column("CreatedAt", header: "Thời gian tạo", format: @<text>@item.CreatedAt</text>, style: "colCreatedAt")
+			),
 			tableStyle: "table table-bordered table-striped"
-			//alternatingRowStyle: "webgrid-alternating-row",
-			//rowStyle: "webgrid-row-style"
-        )
+		)
     }
 </div>
